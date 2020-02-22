@@ -1,0 +1,64 @@
+data:
+  AzureWebJobsStorage: ''
+  FUNCTIONS_WORKER_RUNTIME: ZG90bmV0
+apiVersion: v1
+kind: Secret
+metadata:
+  name: function1
+  namespace: default
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: function1
+  namespace: default
+  labels:
+    app: function1
+spec:
+  selector:
+    app: function1
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: function1
+  namespace: default
+  labels:
+    app: function1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: function1
+  template:
+    metadata:
+      labels:
+        app: function1
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/id: "function1"
+        dapr.io/port: "80"
+        dapr.io/log-level: "debug"
+    spec:
+      containers:
+      - name: function1
+        image: jeffhollan/function1
+        ports:
+        - containerPort: 80
+        env:
+        - name: dapr-url
+          value: http://localhost:3500
+        - name: function2-url
+          value: function2/method/world
+        - name: state-store
+          value: primary
+        envFrom:
+        - secretRef:
+            name: function1
+---
+

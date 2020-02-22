@@ -1,0 +1,57 @@
+data:
+  AzureWebJobsStorage: ''
+  FUNCTIONS_WORKER_RUNTIME: ZG90bmV0
+apiVersion: v1
+kind: Secret
+metadata:
+  name: function2
+  namespace: default
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: function2-http
+  namespace: default
+spec:
+  selector:
+    app: function2-http
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: function2-http
+  namespace: default
+  labels:
+    app: function2-http
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: function2-http
+  template:
+    metadata:
+      labels:
+        app: function2-http
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/id: "function2-http"
+        dapr.io/port: "80"
+    spec:
+      containers:
+      - name: function2-http
+        image: jeffhollan/function2
+        ports:
+        - containerPort: 80
+        env:
+        - name: AzureFunctionsJobHost__functions__0
+          value: World
+        envFrom:
+        - secretRef:
+            name: function2
+---
+
