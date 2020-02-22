@@ -1,0 +1,15 @@
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: rabbitmq
+spec:
+  type: bindings.rabbitmq
+  metadata:
+  - name: queueName
+    value: queue-dapr
+  - name: host
+    value: amqp://user:PASSWORD@rabbitmq.default.svc.cluster.local:5672
+  - name: durable
+    value: true
+  - name: deleteWhenUnused
+    value: false

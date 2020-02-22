@@ -1,6 +1,7 @@
 data:
   AzureWebJobsStorage: ''
   FUNCTIONS_WORKER_RUNTIME: ZG90bmV0
+  RabbitMQConnection: YW1xcDovL3VzZXI6UEFTU1dPUkRANDAuOTEuODcuMTA2OjU2NzI=
 apiVersion: v1
 kind: Secret
 metadata:
