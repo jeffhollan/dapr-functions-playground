@@ -10,11 +10,11 @@ metadata:
 apiVersion: v1
 kind: Service
 metadata:
-  name: function2-http
+  name: function2
   namespace: default
 spec:
   selector:
-    app: function2-http
+    app: function2
   ports:
   - protocol: TCP
     port: 80
@@ -24,26 +24,27 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: function2-http
+  name: function2
   namespace: default
   labels:
-    app: function2-http
+    app: function2
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: function2-http
+      app: function2
   template:
     metadata:
       labels:
-        app: function2-http
+        app: function2
       annotations:
         dapr.io/enabled: "true"
-        dapr.io/id: "function2-http"
+        dapr.io/id: "function2"
         dapr.io/port: "80"
+        dapr.io/config: "tracing"
     spec:
       containers:
-      - name: function2-http
+      - name: function2
         image: jeffhollan/function2
         ports:
         - containerPort: 80

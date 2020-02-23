@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: zipkin
+  name: zipkin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: zipkin
+  template:
+    metadata:
+      labels:
+        app: zipkin
+    spec:
+      containers:
+      - image: openzipkin/zipkin
+        name: zipkin
+        ports:
+        - containerPort: 9411
+        resources: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: zipkin
+  namespace: default
+spec:
+  selector:
+    app: zipkin
+  ports:
+  - protocol: TCP
+    port: 9411
+  type: ClusterIP
+---
+apiVersion: dapr.io/v1alpha1
+kind: Configuration
+metadata:
+  name: tracing
+spec:
+  tracing:
+    enabled: true
+    expandParams: true
+    includeBody: true
+---
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: zipkin
+spec:
+  type: exporters.zipkin
+  metadata:
+  - name: enabled
+    value: "true"
+  - name: exporterAddress
+    value: "http://zipkin.default.svc.cluster.local:9411/api/v2/spans"

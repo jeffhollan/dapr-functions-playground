@@ -8,8 +8,8 @@ spec:
   - name: queueName
     value: queue-dapr
   - name: host
-    value: amqp://user:PASSWORD@rabbitmq.default.svc.cluster.local:5672
+    value: 'amqp://user:PASSWORD@rabbitmq.default.svc.cluster.local:5672'
   - name: durable
-    value: true
+    value: 'true'
   - name: deleteWhenUnused
-    value: false
+    value: 'false'

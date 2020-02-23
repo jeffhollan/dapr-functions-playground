@@ -1,7 +1,7 @@
 data:
   AzureWebJobsStorage: ''
   FUNCTIONS_WORKER_RUNTIME: ZG90bmV0
-  RabbitMQConnection: YW1xcDovL3VzZXI6UEFTU1dPUkRANDAuOTEuODcuMTA2OjU2NzI=
+  RabbitMQConnection: YW1xcDovL3VzZXI6UEFTU1dPUkRAcmFiYml0bXEuZGVmYXVsdC5zdmMuY2x1c3Rlci5sb2NhbDo1Njcy
 apiVersion: v1
 kind: Secret
 metadata:
@@ -45,6 +45,7 @@ spec:
         dapr.io/id: "function1"
         dapr.io/port: "80"
         dapr.io/log-level: "debug"
+        dapr.io/config: "tracing"
     spec:
       containers:
       - name: function1
